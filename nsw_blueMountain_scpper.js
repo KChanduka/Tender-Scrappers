@@ -31,7 +31,6 @@ async function NSW_BlueMountain(){
                 const page2 = await browser.newPage();
                 await page2.goto(elm);
                 
-                // await page2.screenshot({path:'home.png', fullPage:true});
                 await page2.waitForSelector('body');
                 // const element = await page2.$('.dhtmlwindow[style*="display: none"]');
 
