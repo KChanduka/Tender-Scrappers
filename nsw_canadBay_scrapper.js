@@ -9,7 +9,7 @@ async function NSW_CanadaBay(){
     try{    
         const page1 = await browser.newPage();
 
-        await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=3462');
+        await page1.goto('https://www.vendorpanel.com.au/publictenders.aspx?emcc=89D7EFF95AAA');
         // await page1.screenshot({path:'home.png', fullPage:true});
 
             //extracting tender links 

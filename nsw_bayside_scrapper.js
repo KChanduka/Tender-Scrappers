@@ -9,7 +9,9 @@ async function NSW_Bayside(){
     try{    
         const page1 = await browser.newPage();
 
-        await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=5399');
+        // await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=5399');
+        await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?emcc=14789E49E574&mode=all');
+
 
             //extracting tender links 
             const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
@@ -30,7 +32,7 @@ async function NSW_Bayside(){
                 const page2 = await browser.newPage();
                 await page2.goto(elm);
                 
-                await page2.screenshot({path:'home.png', fullPage:true});
+                // await page2.screenshot({path:'home.png', fullPage:true});
                 await page2.waitForSelector('body');
                 // const element = await page2.$('.dhtmlwindow[style*="display: none"]');
 
