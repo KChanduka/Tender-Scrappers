@@ -245,7 +245,7 @@ async function NSW_Armidale(){
                         
 
                     //description
-                        let description =';'
+                        let description =''
                         try{
                             description = await page2.evaluate(()=>{
                                 let descriptionElement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(7) .opportunityPreviewContent');
