@@ -194,7 +194,7 @@ async function Ballina() {
                 if (isDateValid(closingDate)) {
                     closingDate;
                 } else {
-                    closingDate = "not specified";
+                    closingDate = "not date";
                 }
     
             }catch(error){
