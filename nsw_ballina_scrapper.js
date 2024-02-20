@@ -156,7 +156,7 @@ async function Ballina() {
     
         //extracting publishedDate
             let publishedDate = "not specified";
-            try{
+
                 publishedDate = await page1.evaluate(()=>{
                     let publishedDateElement  = document.querySelector('#ctl00_cphMain_tabStrip_tabDetails_tenderView_pnlTender > table > tbody:nth-child(1) > tr:nth-child(7) > td:nth-child(2)');
     
@@ -173,13 +173,11 @@ async function Ballina() {
                     publishedDate = "not specified";
                     }
     
-            }catch(error){
-                console.log("published Date",error);
-            }
+
     
         //extracting closingDate
             let closingDate = "not specified";
-            try{
+
                 closingDate = await page1.evaluate(()=>{
                     let closingDateElement  = document.querySelector('#ctl00_cphMain_tabStrip_tabDetails_tenderView_pnlTender > table > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2)');
     
@@ -194,25 +192,20 @@ async function Ballina() {
                 if (isDateValid(closingDate)) {
                     closingDate;
                 } else {
-                    closingDate = "not date";
+                    closingDate = "not date found";
                 }
     
-            }catch(error){
-                console.log("closing Date",error);
-            }
     
         //extracting description
             let description =''
-            try{
+
                 description = await page1.evaluate(()=>{
                     let descriptionElement = document.querySelector('#ctl00_cphMain_tabStrip_tabDetails_tenderView_pnlTender > table > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2)');
     
                     descriptionElement? descriptionElement = descriptionElement.innerText.replace(/\n+/g," ") : descriptionElement='';
                     return descriptionElement;
                 })
-            }catch(error){
-                console.log('description extraction',error);
-            }
+
     
         //extracting link
         var link;
