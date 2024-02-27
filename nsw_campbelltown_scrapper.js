@@ -4,10 +4,10 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const email = "onetender66@gmail.com";
-const pwd = "oneTender#99"; 
+const email = "onetender3@gmail.com";
+const pwd = "oNetender#99"; 
 
-async function NSW_CentralCoast(){
+async function NSW_Campbelltown(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -17,7 +17,7 @@ async function NSW_CentralCoast(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/centralcoastnsw/');
+            await page1.goto('https://portal.tenderlink.com/campbelltown/login?ReturnUrl=%2Fcampbelltown%2FHome');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -42,38 +42,76 @@ async function NSW_CentralCoast(){
         // tenderData = [];
 
         //looping inside each link to scrape data
-        for(let i = 0; i<numOfLinks-1 ; i++){
+        for(let i = 0; i<numOfLinks ; i++){
 
-            let tempObj = await page1.evaluate((i)=>{
+
 
                 //title
-                    let titleElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(2)`);
-                    titleElement = titleElement? titleElement.innerText : "";
+                let titleElement = "";
+try {
+                    titleElement = await page1.evaluate((i)=>{titleElement= document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(2)`);
+                    titleElement = titleElement? titleElement.innerText : ""
+                    return titleElement;},i);
+} catch (error) {
+    console.log("titleElement",error);
+    throw error;
+}
                 //agency
                 //atmId
-                    let atmIdElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
-                    atmIdElement = atmIdElement? atmIdElement.innerText: "";
+                let atmIdElement = "";
+
+try {
+                atmIdElement = await page1.evaluate((i)=>{
+                atmIdElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
+                atmIdElement = atmIdElement? atmIdElement.innerText: "";
+                    return atmIdElement;
+                },i);
+
+} catch (error) {
+    console.log("atmId",error);
+    throw error;
+}
                 //category
                 //location
                 //region
                 //idNumber
-                  let  idNumberElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
-                  idNumberElement = idNumberElement? idNumberElement.innerText:"";
+                let  idNumberElement = "";
+try {
+                idNumberElement = await page1.evaluate((i)=>{
+                    idNumberElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
+                    idNumberElement = idNumberElement? idNumberElement.innerText:"";
+                    return idNumberElement;
+                },i);
+
+} catch (error) {
+    console.log("idNumber",error);
+    throw error;
+}
                 //publishedDate
                 //closingDate
-                closingDateElemnt = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(5)`);
-                closingDateElemnt = closingDateElemnt? closingDateElemnt.innerText : "no date found";
+                let closingDateElemnt = "no date found";
+try {
+                closingDateElemnt = await page1.evaluate((i)=>{
+                    closingDateElemnt = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(5)`);
+                    closingDateElemnt = closingDateElemnt? closingDateElemnt.innerText : "no date found";
+                    return closingDateElemnt;
+                },i);
+
+} catch (error) {
+    console.log("closingDate",error);
+    throw error;
+}
                 //description-extracted insid the next evaluate function
                 //link-extracted out of this evaluate function
                 //updatedDateTime -extracted out of this evaulate function
 
-                return {
+                tempObj =  {
                     title: titleElement,
                     agency: "",
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Central Coast Council"],
+                    region: ["Campbelltown City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -82,7 +120,6 @@ async function NSW_CentralCoast(){
                     updatedDateTime: ""
                 };
 
-            },i);
 
             //format date function
                 function formatCustomDate(inputDate) {
@@ -113,16 +150,22 @@ async function NSW_CentralCoast(){
 
             //extracting description
                 //go inside the link-click on the tenderID
-                    await page1.click(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
+                    await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
                     // await page1.waitForNavigation({waitUntil:'networkidle2'});
                     await page1.waitForTimeout(2000);
 
                 //extracting descrption
-                let description = await page1.evaluate(()=>{
-                    let descriptionElement = document.querySelector('.tendertabletext');
-                    descriptionElement = descriptionElement? descriptionElement.innerText : "";
-                    return descriptionElement.replace(/\n+/g," ");
-                });
+                let description = "";
+try {
+                     description = await page1.evaluate(()=>{
+                        let descriptionElement = document.querySelector('.tendertabletext');
+                        descriptionElement = descriptionElement? descriptionElement.innerText : "";
+                        return descriptionElement.replace(/\n+/g," ");
+                    });
+} catch (error) {
+    console.log("description",error);
+    throw error;
+}
                 
                 tempObj.description = description;
 
@@ -147,12 +190,12 @@ async function NSW_CentralCoast(){
 
                 updatedDateTime = new Date().toLocaleDateString();
                 tempObj.updatedDateTime = formatDate(updatedDateTime);
+
             
             //pushing tempObj into tenderData array
                 tenderData.push(tempObj);
         //goback to the all tender page
         await page1.goBack();
-        await page1.waitForTimeout(3000);
         console.log(i);
         }//loop end
             
@@ -168,4 +211,5 @@ async function NSW_CentralCoast(){
 
 }
 
-NSW_CentralCoast();
+NSW_Campbelltown(); 
+

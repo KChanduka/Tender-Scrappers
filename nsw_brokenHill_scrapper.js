@@ -9,7 +9,7 @@ async function NSW_BrokenHill(){
     try{    
         const page1 = await browser.newPage();
 
-        await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?mode=category&g=50c818bb80c044cab1c37a23ba39eee8s1554&emcc=88BAD47CAE83');
+        await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?emcc=88BAD47CAE83');
 
             //extracting tender links 
             const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
