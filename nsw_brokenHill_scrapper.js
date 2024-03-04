@@ -5,7 +5,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 async function NSW_BrokenHill(){
-    const browser  = await puppeteer.launch();
+    const browser  = await puppeteer.launch({headless:false});
     try{    
         const page1 = await browser.newPage();
 
