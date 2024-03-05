@@ -283,8 +283,8 @@ try{
                 
                 //counter for scraped links logged to the console
                 await page2.close();
-                console.log("scraped links: ", i);
-                i++;
+                // console.log("scraped links: ", i);
+                // i++;
                 
             }
             

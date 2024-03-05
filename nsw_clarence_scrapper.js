@@ -6,7 +6,7 @@ puppeteer.use(pluginStealth());
 async function NSW_Clarence(){
     
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: ["--no-sandbox"]
 
     });
