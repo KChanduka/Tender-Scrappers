@@ -4,9 +4,9 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const {pwd,email }= require("./login.js"); 
+const {pwd,email} = require("./login.js"); 
 
-async function NSW_Oberon(){
+async function NSW_portMacquaire(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,7 +16,7 @@ async function NSW_Oberon(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon/login?ReturnUrl=%2Foberon');
+            await page1.goto('https://portal.tenderlink.com/pmhc/login?ReturnUrl=%2Fpmhc');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -93,7 +93,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["Port Macquaire-Hastings Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -129,8 +129,7 @@ async function NSW_Oberon(){
 
             //fromatting closingDate
                 tempObj.closingDate = formatCustomDate(tempObj.closingDate);
-                
-                await page1.waitForTimeout(2000);
+
             //extracting description
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
@@ -188,11 +187,9 @@ try {
     } catch (error) {
         console.log(tenderData);
         console.log(error);
-        await browser.close();
-        
-    }
+        await browserrequire('./pwd.js')}
 
 }
 
-NSW_Oberon(); 
+NSW_portMacquaire(); 
 

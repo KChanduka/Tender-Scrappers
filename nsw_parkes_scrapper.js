@@ -4,9 +4,9 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const {pwd,email }= require("./login.js"); 
+const{email,pwd} = require('./login.js'); 
 
-async function NSW_Oberon(){
+async function NSW_Parkes(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,7 +16,7 @@ async function NSW_Oberon(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon/login?ReturnUrl=%2Foberon');
+            await page1.goto('https://portal.tenderlink.com/orange/login?ReturnUrl=%2Forange');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -93,7 +93,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["Orange City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -129,7 +129,7 @@ async function NSW_Oberon(){
 
             //fromatting closingDate
                 tempObj.closingDate = formatCustomDate(tempObj.closingDate);
-                
+
                 await page1.waitForTimeout(2000);
             //extracting description
                 //go inside the link-click on the tenderID
@@ -194,5 +194,5 @@ try {
 
 }
 
-NSW_Oberon(); 
+NSW_Parkes(); 
 

@@ -4,8 +4,8 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const email = "onetender3@gmail.com";
-const pwd = require('./pwd.js'); 
+// const email = "onetender3@gmail.com";
+const {email,pwd} = require('./login.js'); 
 
 async function NSW_Orange(){
     const browser = await puppeteer.launch({
@@ -21,7 +21,7 @@ async function NSW_Orange(){
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
-            await page1.type('#Email',email,{delay:130});
+            await page1.type('#Email',email.main1,{delay:130});
             await page1.type('#Password',pwd.tenderlink_pwd_nsw_1,{delay:150});
             
         //click the login button
@@ -131,6 +131,7 @@ async function NSW_Orange(){
             //fromatting closingDate
                 tempObj.closingDate = formatCustomDate(tempObj.closingDate);
 
+                await page1.waitForTimeout(2000);
             //extracting description
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
