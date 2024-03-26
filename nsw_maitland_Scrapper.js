@@ -4,10 +4,10 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const email = "onetender3@gmail.com";
-const pwd = "Um5_8)X_]?9W"; 
+const email = "tenderone833@gmail.com";
+const pwd = "K6v0c7:8~,eI";
 
-async function NSW_Cowra(){
+async function NSW_Maitland(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -17,7 +17,7 @@ async function NSW_Cowra(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/cowra/login?ReturnUrl=%2Fcowra');
+            await page1.goto('https://portal.tenderlink.com/maitland/login?ReturnUrl=%2Fmaitland');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -50,14 +50,14 @@ async function NSW_Cowra(){
 
                 //title
                 let titleElement = "";
-                    titleElement = await page1.evaluate((i)=>{titleElement= document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(2)`);
+                    titleElement = await page1.evaluate((i)=>{titleElement= document.querySelector(`#firefoxscrolllayer > div > table > tbody  > tr:nth-child(${2+i}) > td:nth-child(2)`);
                     titleElement = titleElement? titleElement.innerText : ""
                     return titleElement;},i);
                 //agency
                 //atmId
                 let atmIdElement = "";
                 atmIdElement = await page1.evaluate((i)=>{
-                atmIdElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
+                atmIdElement = document.querySelector(`#firefoxscrolllayer > div > table > tbody  > tr:nth-child(${2+i}) > td:nth-child(1)`);
                 atmIdElement = atmIdElement? atmIdElement.innerText: "";
                     return atmIdElement;
                 },i);
@@ -68,7 +68,7 @@ async function NSW_Cowra(){
                 //idNumber
                 let  idNumberElement = "";
                 idNumberElement = await page1.evaluate((i)=>{
-                    idNumberElement = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1)`);
+                    idNumberElement = document.querySelector(`#firefoxscrolllayer > div > table > tbody > tr:nth-child(${2+i}) > td:nth-child(1)`);
                     idNumberElement = idNumberElement? idNumberElement.innerText:"";
                     return idNumberElement;
                 },i);
@@ -78,7 +78,7 @@ async function NSW_Cowra(){
                 //closingDate
                 let closingDateElemnt = "no date found";
                 closingDateElemnt = await page1.evaluate((i)=>{
-                    closingDateElemnt = document.querySelector(`#firefoxscrolllayer > div:nth-child(1)> .table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(5)`);
+                    closingDateElemnt = document.querySelector(`#firefoxscrolllayer > div > table > tbody  > tr:nth-child(${2+i}) > td:nth-child(5)`);
                     closingDateElemnt = closingDateElemnt? closingDateElemnt.innerText : "no date found";
                     return closingDateElemnt;
                 },i);
@@ -94,7 +94,7 @@ async function NSW_Cowra(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Cowra Shire Council"],
+                    region: ["Maitland City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -133,9 +133,10 @@ async function NSW_Cowra(){
 
             //extracting description
                 //go inside the link-click on the tenderID
-                    await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
-                    // await page1.waitForNavigation({waitUntil:'networkidle2'});
-                    await page1.waitForTimeout(2000);
+                    await page1.click(`table > tbody > tr:nth-child(${2+i}) > td > a`);
+                    // await page1.waitForNavigation({waitUntil:'domcontentloaded'});
+                    await page1.waitForTimeout(3000);
+                    await page1.waitForSelector(".tendertabletext");
 
                 //extracting descrption
                 let description = "";
@@ -179,10 +180,10 @@ try {
                 tenderData.push(tempObj);
         //goback to the all tender page
         await page1.goBack();
+        await page1.waitForTimeout(2000);
         console.log(i);
         }//loop end
             
-        await page1.waitForTimeout(3000);
         await browser.close()
         console.log(tenderData);
     } catch (error) {
@@ -194,5 +195,5 @@ try {
 
 }
 
-NSW_Cowra(); 
+NSW_Maitland(); 
 

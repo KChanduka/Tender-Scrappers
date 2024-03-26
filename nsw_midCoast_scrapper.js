@@ -127,7 +127,7 @@ try{
 
                 //region
 
-                    const region = ["Lithgow City Council"];
+                    const region = ["Mid Coast Council"];
 
                     // try{
                     //     const tempRegion = await page2.evaluate(()=>{

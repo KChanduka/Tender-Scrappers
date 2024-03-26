@@ -1,10 +1,9 @@
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
-// const reArrangeTheOldAndNewData = require("./util_functions");
 
 puppeteer.use(pluginStealth());
 
-async function NSW_RichmondValley(){
+async function NSW_Lachlan(){
     
     const browser = await puppeteer.launch({
         headless: true,
@@ -14,7 +13,7 @@ async function NSW_RichmondValley(){
 try{    
     const page1 = await browser.newPage();
 
-    await page1.goto('https://www.vendorpanel.com.au/publictenders.aspx?emcc=4B660E2E0CFB');
+    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?emcc=1A0F46296485&mode=all');
 
         //extracting tender links 
         const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
@@ -137,7 +136,7 @@ try{
 
                 //region
 
-                    const region = ["Richmond Valley Council"];
+                    const region = ["Lachlan Shire Council"];
 
                     // try{
                     //     const tempRegion = await page2.evaluate(()=>{
@@ -292,11 +291,14 @@ try{
                     link,
                     updatedDateTime,
                 });
+                
                 //counter for scraped links logged to the console
-
                 await page2.close();
+                console.log("scraped links: ", i);
+                i++;
                 
             }
+            
             console.log(scrapedData);
             await browser.close();
             
@@ -307,5 +309,4 @@ try{
 
 }
 
-NSW_RichmondValley();
-// module.exports = NSW_MidCoast;
+NSW_Lachlan();

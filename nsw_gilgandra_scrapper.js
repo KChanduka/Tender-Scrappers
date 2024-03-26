@@ -5,9 +5,9 @@ puppeteer.use(pluginStealth());
 
 //login credentials
 const email = "onetender3@gmail.com";
-const pwd = "Um5_8)X_]?9W"; 
+const pwd = "a7Z738PzG>k="; 
 
-async function NSW_Cowra(){
+async function NSW_Gilgandra(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -17,7 +17,7 @@ async function NSW_Cowra(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/cowra/login?ReturnUrl=%2Fcowra');
+            await page1.goto('https://portal.tenderlink.com/goulburn/login?returnUrl=%2Fgoulburn%2Feditsupplier%2F');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -94,7 +94,7 @@ async function NSW_Cowra(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Cowra Shire Council"],
+                    region: ["Gilgandra Shire Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -179,10 +179,10 @@ try {
                 tenderData.push(tempObj);
         //goback to the all tender page
         await page1.goBack();
+        await page1.waitForTimeout(3000);
         console.log(i);
         }//loop end
             
-        await page1.waitForTimeout(3000);
         await browser.close()
         console.log(tenderData);
     } catch (error) {
@@ -194,5 +194,5 @@ try {
 
 }
 
-NSW_Cowra(); 
+NSW_Gilgandra(); 
 

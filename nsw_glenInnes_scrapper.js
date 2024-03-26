@@ -5,9 +5,9 @@ puppeteer.use(pluginStealth());
 
 //login credentials
 const email = "onetender3@gmail.com";
-const pwd = "Um5_8)X_]?9W"; 
+const pwd = "Kw27>x.5psDB"; 
 
-async function NSW_Cowra(){
+async function NSW_GlenInnes(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -17,7 +17,7 @@ async function NSW_Cowra(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/cowra/login?ReturnUrl=%2Fcowra');
+            await page1.goto('https://portal.tenderlink.com/gisc/login?ReturnUrl=%2Fgisc%2FHome');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -94,7 +94,7 @@ async function NSW_Cowra(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Cowra Shire Council"],
+                    region: ["Glen Innes Severn Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -194,5 +194,5 @@ try {
 
 }
 
-NSW_Cowra(); 
+NSW_GlenInnes(); 
 
