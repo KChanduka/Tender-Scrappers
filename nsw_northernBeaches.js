@@ -4,8 +4,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const email = "onetender3@gmail.com";
-const pwd = require('./pwd.js')
+const {pwd,email} = require('./login.js')
 
 async function NSW_NothernBeaches(){
     const browser = await puppeteer.launch({
@@ -21,7 +20,7 @@ async function NSW_NothernBeaches(){
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
-            await page1.type('#Email',email,{delay:130});
+            await page1.type('#Email',email.main1,{delay:130});
             await page1.type('#Password',pwd.tenderlink_pwd_nsw_1,{delay:150});
             
         //click the login button
