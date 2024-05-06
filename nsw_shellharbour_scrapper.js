@@ -6,7 +6,7 @@ puppeteer.use(pluginStealth());
 //login credentials
 const {pwd,email }= require("./login.js"); 
 
-async function NSW_Oberon(){
+async function NSW_Shellharbour(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,7 +16,7 @@ async function NSW_Oberon(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon');
+            await page1.goto('https://portal.tenderlink.com/shellharbour/login?ReturnUrl=%2Fshellharbour%2F');
             await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
     
@@ -94,7 +94,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["Shellharbour City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -195,5 +195,5 @@ try {
 
 }
 
-NSW_Oberon(); 
+NSW_Shellharbour(); 
 

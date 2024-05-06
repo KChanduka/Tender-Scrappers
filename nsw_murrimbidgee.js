@@ -4,9 +4,9 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const {pwd,email }= require("./login.js"); 
+const {pwd,email} = require("./login.js")
 
-async function NSW_Oberon(){
+async function NSW_Murrimbidgee(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,13 +16,12 @@ async function NSW_Oberon(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon');
-            await page1.waitForTimeout(2000);
+            await page1.goto('https://portal.tenderlink.com/murrumbidgee/login?ReturnUrl=%2Fmurrumbidgee%2FHome');
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
-            await page1.type('#Email',email.main1,{delay:130});
-            await page1.type('#Password',pwd.tenderlink_pwd_nsw_1,{delay:150});
+            await page1.type('#Email',email.murrimbidgee,{delay:130});
+            await page1.type('#Password',pwd.murrimbidgee,{delay:150});
             
         //click the login button
             await page1.click('#btnLogin')
@@ -94,7 +93,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["New Castle City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -130,8 +129,7 @@ async function NSW_Oberon(){
 
             //fromatting closingDate
                 tempObj.closingDate = formatCustomDate(tempObj.closingDate);
-                
-                await page1.waitForTimeout(2000);
+
             //extracting description
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
@@ -195,5 +193,5 @@ try {
 
 }
 
-NSW_Oberon(); 
+NSW_Murrimbidgee(); 
 

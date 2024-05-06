@@ -4,9 +4,9 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(pluginStealth());
 
 //login credentials
-const {pwd,email} = require("./login.js"); 
+const {pwd,email }= require("./login.js"); 
 
-async function NSW_portMacquaire(){
+async function NSW_Strathfield(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,7 +16,8 @@ async function NSW_portMacquaire(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/pmhc/login?ReturnUrl=%2Fpmhc');
+            await page1.goto('https://portal.tenderlink.com/strathfield/login?ReturnUrl=%2Fstrathfield%2F');
+            await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
     
         //insert the credentials
@@ -28,11 +29,16 @@ async function NSW_portMacquaire(){
             await page1.waitForNavigation({waitUntil:'load'});
             await page1.waitForTimeout(2000);
 
+
+
             
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
             await page1.waitForTimeout(2000);
+            await page1.waitForSelector('#divscrolling');
+
+
 
 
         //checking how many links are there to be scraped
@@ -93,7 +99,7 @@ async function NSW_portMacquaire(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Port Macquaire-Hastings Council"],
+                    region: ["Strathfield Municipal Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -129,7 +135,8 @@ async function NSW_portMacquaire(){
 
             //fromatting closingDate
                 tempObj.closingDate = formatCustomDate(tempObj.closingDate);
-
+                
+                await page1.waitForTimeout(2000);
             //extracting description
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
@@ -187,9 +194,11 @@ try {
     } catch (error) {
         console.log(tenderData);
         console.log(error);
-        await browserrequire('./pwd.js')}
+        await browser.close();
+        
+    }
 
 }
 
-NSW_portMacquaire(); 
+NSW_Strathfield(); 
 

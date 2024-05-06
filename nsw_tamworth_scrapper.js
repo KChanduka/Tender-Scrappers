@@ -1,11 +1,16 @@
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
+// const reArrangeTheOldAndNewData = require("./util_functions");
 
 puppeteer.use(pluginStealth());
 
 async function NSW_Tamworth(){
     
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox"]
+
+    });
 try{    
     const page1 = await browser.newPage();
 
@@ -37,16 +42,18 @@ try{
 
 
             //pressing the preview button
-            // await page2.click('#masterlayoutcontainer .lnkbtnblue');
-            await page2.click('#tenderInfotbl > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > a:nth-child(1)');
-            
-            await page2.waitForTimeout(2000);
+            //waiting for the popup
+            await Promise.all([
+                page2.click('#tenderInfotbl > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > a:nth-child(1)'),
+                page2.waitForSelector('#mstrlayoutcontainerPopUp')
+            ])
+
 
             //extracting data
 
                 //title
                 let title = '';
-                try{
+
                 title =  await page2.evaluate(()=>{
                         let titleELement = document.querySelector('#mstrlayoutcontainerPopUp tbody .OpportunityPreviewNameRowTenderPublic td');
 
@@ -55,7 +62,7 @@ try{
                             titleELement = titleELement.innerText;
 
                             //removing the idNUmber
-                            const match = titleELement.match(/(\d+-\d+)/);
+                            const match = titleELement.match(/^[A-Za-z]\d+\/\d+\s+-\s+/);
         
                             if (match) {
                             const [matchedText] = match;
@@ -75,9 +82,18 @@ try{
                         
                         return titleELement;
                     })
-                }catch(error){
-                    
-                }
+
+                    //if there is Buyer's Reference in the site. the code inside if will be executed.Else
+                    const isBuyersReference = await page2.evaluate(()=>document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(4) .opportunityPreviewMinHeading').innerText);
+                    let childValIncrease = 0; 
+                    let childValDecrease =0;
+                    if(isBuyersReference == "Buyers Reference #"){
+                        //no chhange to childVal;
+                    }else{
+                        childValIncrease =1;
+                        childValDecrease =-1;
+                    }
+
 
                 //agency ""
                     let agency = "";
@@ -86,19 +102,16 @@ try{
                 //atmID ""
                     let atmId = "";
 
-                    try{
-                        atmId = await page2.evaluate(()=>{
-                            let atmIdELement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(3) .opportunityPreviewContent');
+
+                        atmId = await page2.evaluate((val)=>{
+                            let atmIdELement = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${4+val}) .opportunityPreviewContent`);
 
                             atmIdELement? atmIdELement = atmIdELement.innerText : atmIdELement;
 
                             return atmIdELement;
-                        })
+                        },childValDecrease)
 
-                    }catch(error){
-                        console.log('atmId extraction',error);
 
-                    }
                     
 
                 //category 
@@ -107,21 +120,18 @@ try{
                 //location
                     let location = ["NSW"];
 
-                    try{
-                        const tempLocations = await page2.evaluate(()=>{
-                            let locationElement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(5) div:nth-child(3) .opportunityPreviewContent ');
+                        const tempLocations = await page2.evaluate((val)=>{
+                            let locationElement = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${6+val}) div:nth-child(3) .opportunityPreviewContent `);
 
                             if(locationElement){
 
                                 locationElement = locationElement.innerHTML.split("<br>");
                             }
                             return locationElement
-                        });
+                        },childValDecrease);
                         location = location.concat(tempLocations);
 
-                    }catch(error){
-
-                    }
+         
 
                     
 
@@ -129,41 +139,19 @@ try{
 
                     const region = ["Tamworth Regional Council"];
 
-                    // try{
-                    //     const tempRegion = await page2.evaluate(()=>{
-                    //         let regionELement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(3) div:nth-child(2) .opportunityPreviewContent ul li');
 
-                    //         if(regionELement){
-
-                    //             regionELement = regionELement.innerHTML.split("<br>");
-                    //         }else{
-                    //             regionELement = 'not specified';
-                    //         }
-                    //         return regionELement
-                    //     });
-                    //     region = region.concat(tempRegion);
-
-                    // }catch(error){
-                    //     console.log('region extraction',error);
-
-                    // }
-
-                //idNumber
 
                     let idNumber = "";
 
-                    try{
-                        idNumber = await page2.evaluate(()=>{
-                            let idNumberELement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(3) .opportunityPreviewContent');
+                        idNumber = await page2.evaluate((val)=>{
+                            let idNumberELement = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${4+val}) .opportunityPreviewContent`);
 
                             idNumberELement? idNumberELement = idNumberELement.innerText : idNumberELement=''
 
                             return idNumberELement;
-                        })
+                        },childValDecrease)
 
-                    }catch(error){
-                        console.log('idNumber extraction',error);
-                    }
+
 
 
 
@@ -195,75 +183,62 @@ try{
                         
 
                 //publishedDate
-                    let publishedDate = "no date found";
-                    try{
-                        publishedDate = await page2.evaluate(()=>{
-                            let publishedDateElement  = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(4) .opportunityPreviewInnerRow:nth-child(1) .opportunityPreviewContent');
+                let publishedDate = "no date found";
+                            publishedDate = await page2.evaluate((val)=>{
+                                let publishedDateElement  = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${5+val}) .opportunityPreviewInnerRow:nth-child(1) .opportunityPreviewContent`);
+    
+                                publishedDateElement? publishedDateElement = publishedDateElement.innerText : publishedDateElement = "no date found";
+    
+                                return publishedDateElement;
+                            },childValDecrease)
+                            // formatting the date
+                            publishedDate = formatCustomDate(publishedDate);
+    
+                            if (isDateValid(publishedDate)) {
+                               publishedDate;
+                              } else {
+                               publishedDate = "no date found";
+                              }
 
-                            publishedDateElement? publishedDateElement = publishedDateElement.innerText : publishedDateElement = "no date found";
-
-                            return publishedDateElement;
-                        })
-                        // formatting the date
-                        publishedDate = formatCustomDate(publishedDate);
-
-                        if (isDateValid(publishedDate)) {
-                           publishedDate;
-                          } else {
-                           publishedDate = "no date found";
-                          }
-
-                    }catch(error){
-                        console.log("closing Date",error);
-                    }
 
                     
 
                 //closingDate
-                    let closingDate = "no date found";
-                    try{
-                        closingDate = await page2.evaluate(()=>{
-                            let closingDateElement  = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(4) .opportunityPreviewInnerRow:nth-child(2) .opportunityPreviewContent');
+                let closingDate = "no date found";
 
-                            closingDateElement? closingDateElement = closingDateElement.innerText : closingDateElement = "no date found";
+                            closingDate = await page2.evaluate((val)=>{
+                                let closingDateElement  = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${5+val}) .opportunityPreviewInnerRow:nth-child(2) .opportunityPreviewContent`);
+    
+                                closingDateElement? closingDateElement = closingDateElement.innerText : closingDateElement = "no date found";
+    
+                                return closingDateElement;
+                            },childValDecrease)
+                            //formatting the date
+                            closingDate = formatCustomDate(closingDate);
+    
+                            //varifiying the  date is a valid date
+                            if (isDateValid(closingDate)) {
+                                closingDate;
+                               } else {
+                                closingDate = "no date found";
+                               }
 
-                            return closingDateElement;
-                        })
-                        //formatting the date
-                        closingDate = formatCustomDate(closingDate);
-
-                        //varifiying the  date is a valid date
-                        if (isDateValid(closingDate)) {
-                            closingDate;
-                           } else {
-                            closingDate = "no date found";
-                           }
-
-                    }catch(error){
-                        console.log("closing Date",error);
-                    }
-
-                    
 
                 //description
-                    let description =';'
-                    try{
-                        description = await page2.evaluate(()=>{
-                            let descriptionElement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(6) .opportunityPreviewContent');
+                    let description ='';
+                        description = await page2.evaluate((val)=>{
+                            let descriptionElement = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${7+val}) .opportunityPreviewContent`);
 
                             descriptionElement? descriptionElement = descriptionElement.innerText.replace(/\n+/g," ") : descriptionElement='';
                             return descriptionElement;
-                        })
-                    }catch(error){
-                        console.log('description extraction',error);
-                    }
+                        },childValDecrease)
+
 
                 //link
                     const link = await page2.url();
 
                 //updateDateTime
                     let updatedDateTime = "no date found";
-                    try{
                             //updatedDateTime formattter
                             function formatDate(inputDate) {
                                 const dateObj = new Date(inputDate);
@@ -281,11 +256,7 @@ try{
                         updatedDateTime = new Date().toLocaleDateString();
                         updatedDateTime = formatDate(updatedDateTime);
 
-                    }catch(error){
-                        console.log('updatedDateTime',error);
-                    }
-
-                    
+   
 
                 //pushing the scraped data
                 scrapedData.push({
@@ -302,22 +273,19 @@ try{
                     link,
                     updatedDateTime,
                 });
-                
-                //counter for scraped links logged to the console
+                // reArrangeTheOldAndNewData(scrapedData, "nsw-tmw-");
                 await page2.close();
-                console.log("scraped links: ", i);
-                i++;
                 
             }
-            
             console.log(scrapedData);
-            browser.close();
+            await browser.close();
             
 }catch(error){
         console.log(error);
-        browser.close();
+        await browser.close();
     }
 
 }
 
 NSW_Tamworth();
+module.exports = NSW_Tamworth;

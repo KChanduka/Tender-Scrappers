@@ -1,22 +1,45 @@
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
-
 puppeteer.use(pluginStealth());
 
 //login credentials
 const {pwd,email }= require("./login.js"); 
 
-async function NSW_Oberon(){
+async function NSW_Albury(){
+
+ 
+
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
     })
+
+
+
     tenderData = [];
     try {
-        const page1 = await browser.newPage();
+  // Node.js Puppeteer - launch devtools locally  
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));  
+  const openDevtools = async (page, client) => {  
+      // get current frameId  
+      const frameId = page.mainFrame()._id;  
+      // get URL for devtools from scraping browser  
+      const { url: inspectUrl } = await client.send('Page.inspect', { frameId });  
+      // open devtools URL in local chrome  
+      exec(`"${chromeExecutable}" "${inspectUrl}"`, error => {  
+          if (error)  
+              throw new Error('Unable to open devtools: ' + error);  
+      });  
+      // wait for devtools ui to load  
+      await delay(5000);  
+  };  
     
+  const page1 = await browser.newPage();  
+  const client = await page1.target().createCDPSession();  
+  await openDevtools(page1, client); 
+
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon');
+            await page1.goto('https://portal.tenderlink.com/albury/login?ReturnUrl=%2Falbury');
             await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
     
@@ -29,11 +52,16 @@ async function NSW_Oberon(){
             await page1.waitForNavigation({waitUntil:'load'});
             await page1.waitForTimeout(2000);
 
+
+
             
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
             await page1.waitForTimeout(2000);
+            await page1.waitForSelector('#divscrolling');
+
+
 
 
         //checking how many links are there to be scraped
@@ -94,7 +122,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["Albury City Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -195,5 +223,5 @@ try {
 
 }
 
-NSW_Oberon(); 
+NSW_Albury(); 
 

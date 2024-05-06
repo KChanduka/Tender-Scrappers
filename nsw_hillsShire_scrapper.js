@@ -6,7 +6,7 @@ puppeteer.use(pluginStealth());
 //login credentials
 const {pwd,email }= require("./login.js"); 
 
-async function NSW_Oberon(){
+async function NSW_HillsShire(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox"]
@@ -16,7 +16,7 @@ async function NSW_Oberon(){
         const page1 = await browser.newPage();
     
         //goto the registration page
-            await page1.goto('https://portal.tenderlink.com/oberon');
+            await page1.goto('https://portal.tenderlink.com/thehills/login?ReturnUrl=%2Fthehills%2F');
             await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
     
@@ -29,11 +29,16 @@ async function NSW_Oberon(){
             await page1.waitForNavigation({waitUntil:'load'});
             await page1.waitForTimeout(2000);
 
+
+
             
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
             await page1.waitForTimeout(2000);
+            await page1.waitForSelector('#divscrolling');
+
+
 
 
         //checking how many links are there to be scraped
@@ -94,7 +99,7 @@ async function NSW_Oberon(){
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Federation Council"],
+                    region: ["Hills Shire Council"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -195,5 +200,5 @@ try {
 
 }
 
-NSW_Oberon(); 
+NSW_HillsShire(); 
 
