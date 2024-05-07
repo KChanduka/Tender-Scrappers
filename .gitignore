@@ -1,8 +1,10 @@
 #dependencies
 /node_modules
+/2captcha-solver
 
 #files
 /dateTest.js
 /debugging.js
 /newCentralcoast.js
 /login.js
+/captchaTest.js

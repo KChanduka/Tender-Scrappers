@@ -13,31 +13,10 @@ async function NSW_Albury(){
         headless:false,
         args: ["--no-sandbox"]
     })
-
-
-
     tenderData = [];
-    try {
-  // Node.js Puppeteer - launch devtools locally  
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));  
-  const openDevtools = async (page, client) => {  
-      // get current frameId  
-      const frameId = page.mainFrame()._id;  
-      // get URL for devtools from scraping browser  
-      const { url: inspectUrl } = await client.send('Page.inspect', { frameId });  
-      // open devtools URL in local chrome  
-      exec(`"${chromeExecutable}" "${inspectUrl}"`, error => {  
-          if (error)  
-              throw new Error('Unable to open devtools: ' + error);  
-      });  
-      // wait for devtools ui to load  
-      await delay(5000);  
-  };  
-    
-  const page1 = await browser.newPage();  
-  const client = await page1.target().createCDPSession();  
-  await openDevtools(page1, client); 
-
+    try { 
+        const page1 = await browser.newPage();  
+        await page1.setDefaultNavigationTimeout(30000*4) //setting default timeout to 2minutes.
         //goto the registration page
             await page1.goto('https://portal.tenderlink.com/albury/login?ReturnUrl=%2Falbury');
             await page1.waitForTimeout(2000);
@@ -58,7 +37,7 @@ async function NSW_Albury(){
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
-            await page1.waitForTimeout(2000);
+            await page1.waitForTimeout(5000);
             await page1.waitForSelector('#divscrolling');
 
 
@@ -163,8 +142,9 @@ async function NSW_Albury(){
             //extracting description
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
-                    // await page1.waitForNavigation({waitUntil:'networkidle2'});
-                    await page1.waitForTimeout(2000);
+                    // await page1.waitForNavigation({waitUntil:'domcontentloaded'});
+                    await page1.waitForSelector('#backbutton');
+                    await page1.keyboard.press("Escape"); //stopping the loading
 
                 //extracting descrption
                 let description = "";
@@ -208,10 +188,10 @@ try {
                 tenderData.push(tempObj);
         //goback to the all tender page
         await page1.goBack();
+        await page1.waitForTimeout(3000);
         console.log(i);
         }//loop end
             
-        await page1.waitForTimeout(3000);
         await browser.close()
         console.log(tenderData);
     } catch (error) {
