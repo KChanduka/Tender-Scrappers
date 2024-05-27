@@ -9,10 +9,9 @@ const solver = new Captcha.Solver("af26caa64e6dbe1e678d586fefdc34e8");
 const pathToExtension = require('path').join(__dirname, '2captcha-solver');
 puppeteer.use(pluginStealth());
 
-
-async function NSW_Warrumbungie(){
+async function NT_Darwin(){
     const browser = await puppeteer.launch({
-        headless:false,
+        headless:true,
         args: ["--no-sandbox",    
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,],
@@ -21,13 +20,13 @@ async function NSW_Warrumbungie(){
     scrapedData = [];
     try {
         const page1 = await browser.newPage();
-        const url ='https://portal.tenderlink.com/warrumbungle/login?ReturnUrl=%2Fwarrumbungle%2FHome';
+        await page1.setDefaultNavigationTimeout(0); 
+        const url ='https://portal.tenderlink.com/darwin/login?ReturnUrl=%2Fdarwin';
         //goto the registration page
             await page1.goto(url);
-            await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
             await page1.waitForTimeout(3000);
-
+    
 //if there is an captcha solve it
 try{
     const sitekey = await page1.evaluate(()=>{
@@ -100,7 +99,6 @@ try{
     console.log(error);
 }
 
-
             
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
@@ -109,7 +107,6 @@ try{
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
             await page1.waitForTimeout(2000);
             await page1.waitForSelector('#divscrolling');
-
 
         //checking how many links are there to be scraped
         const linkArr = await page1.evaluate(()=>Array.from(document.querySelectorAll('#firefoxscrolllayer > div:nth-child(1) > .table > tbody > tr')));
@@ -168,8 +165,8 @@ try{
                     agency: "",
                     atmId: atmIdElement,
                     category: "not specified",
-                    location: ["NSW"],
-                    region: ["Warrmubungie Shire Council"],
+                    location: ["NT"],
+                    region: ["City of Darwin"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -212,7 +209,7 @@ try{
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
                     // await page1.waitForNavigation({waitUntil:'networkidle2'});
                     await page1.waitForSelector('#backbutton');
-
+                    
                 //extracting descrption
                 let description = "";
 try {
@@ -256,11 +253,10 @@ try {
         //goback to the all tender page
         await page1.goBack();
         }//loop end
-            
+            // reArrangeTheOldAndNewData(scrapedData, "wa-pth-");
         await browser.close()
         console.log(scrapedData);
     } catch (error) {
-        console.log(scrapedData);
         console.log(error);
         await browser.close();
         
@@ -268,5 +264,5 @@ try {
 
 }
 
-NSW_Warrumbungie(); 
-module.exports = NSW_Warrumbungie;
+NT_Darwin(); 
+module.exports = NT_Darwin;

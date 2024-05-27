@@ -1,9 +1,10 @@
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
+// const reArrangeTheOldAndNewData = require("./util_functions");
 
 puppeteer.use(pluginStealth());
 
-async function QLD_Finders(){
+async function QLD_Mareeba(){
     
     const browser = await puppeteer.launch({
         headless: true,
@@ -13,7 +14,7 @@ async function QLD_Finders(){
 try{    
     const page1 = await browser.newPage();
 
-    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=4012');
+    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=6905');
 
         //extracting tender links 
         const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
@@ -21,7 +22,7 @@ try{
             return link;
         }))
 
-       console.log("total links : ",links.length); 
+       
 
         //array for scraped data
         let scrapedData = [];
@@ -61,7 +62,7 @@ try{
                             titleELement = titleELement.innerText;
 
                             //removing the idNUmber
-                            const match = titleELement.match(/^[A-Za-z]+\d+\/\d+\s+-\s+/);
+                            const match = titleELement.match(/^[A-Za-z]\d+\/\d+\s+-\s+/);
         
                             if (match) {
                             const [matchedText] = match;
@@ -117,7 +118,7 @@ try{
                     let category = "not specified";
 
                 //location
-                    let location = ["NSW"];
+                    let location = ["QLD"];
 
                         const tempLocations = await page2.evaluate((val)=>{
                             let locationElement = document.querySelector(`#mstrlayoutcontainerPopUp tbody tr:nth-child(${6+val}) div:nth-child(3) .opportunityPreviewContent `);
@@ -136,28 +137,9 @@ try{
 
                 //region
 
-                    const region = ["Cobar Shire Council"];
+                    const region = ["Mareeba Shire Council"];
 
-                    // try{
-                    //     const tempRegion = await page2.evaluate(()=>{
-                    //         let regionELement = document.querySelector('#mstrlayoutcontainerPopUp tbody tr:nth-child(3) div:nth-child(2) .opportunityPreviewContent ul li');
 
-                    //         if(regionELement){
-
-                    //             regionELement = regionELement.innerHTML.split("<br>");
-                    //         }else{
-                    //             regionELement = 'not specified';
-                    //         }
-                    //         return regionELement
-                    //     });
-                    //     region = region.concat(tempRegion);
-
-                    // }catch(error){
-                    //     console.log('region extraction',error);
-
-                    // }
-
-                //idNumber
 
                     let idNumber = "";
 
@@ -291,14 +273,10 @@ try{
                     link,
                     updatedDateTime,
                 });
-                
-                //counter for scraped links logged to the console
+                // reArrangeTheOldAndNewData(scrapedData, "nsw-bhill-");
                 await page2.close();
-                console.log("scraped links: ", i);
-                i++;
                 
             }
-            
             console.log(scrapedData);
             await browser.close();
             
@@ -309,5 +287,4 @@ try{
 
 }
 
-QLD_Finders();
-module.exports = QLD_Finders;
+QLD_Mareeba();

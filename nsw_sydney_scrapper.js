@@ -9,8 +9,7 @@ const solver = new Captcha.Solver("af26caa64e6dbe1e678d586fefdc34e8");
 const pathToExtension = require('path').join(__dirname, '2captcha-solver');
 puppeteer.use(pluginStealth());
 
-
-async function NSW_Warrumbungie(){
+async function NSW_Sydney(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox",    
@@ -21,13 +20,13 @@ async function NSW_Warrumbungie(){
     scrapedData = [];
     try {
         const page1 = await browser.newPage();
-        const url ='https://portal.tenderlink.com/warrumbungle/login?ReturnUrl=%2Fwarrumbungle%2FHome';
+        await page1.setDefaultNavigationTimeout(0); 
+        const url ='https://portal.tenderlink.com/cityofsydney/login?ReturnUrl=%2Fcityofsydney';
         //goto the registration page
             await page1.goto(url);
-            await page1.waitForTimeout(2000);
             await page1.waitForSelector('#loginPasswordPane');
             await page1.waitForTimeout(3000);
-
+    
 //if there is an captcha solve it
 try{
     const sitekey = await page1.evaluate(()=>{
@@ -100,16 +99,13 @@ try{
     console.log(error);
 }
 
-
             
         //click the "All current tenders" in the dashboard
             // await page1.click('#menuAllOpenTenders');
             await page1.waitForNavigation({waitUntil:'load'});
-            await page1.waitForTimeout(3000);
             await page1.click('#firefoxscrolllayer > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(3) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > a:nth-child(1)');
             await page1.waitForTimeout(2000);
             await page1.waitForSelector('#divscrolling');
-
 
         //checking how many links are there to be scraped
         const linkArr = await page1.evaluate(()=>Array.from(document.querySelectorAll('#firefoxscrolllayer > div:nth-child(1) > .table > tbody > tr')));
@@ -169,7 +165,7 @@ try{
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["NSW"],
-                    region: ["Warrmubungie Shire Council"],
+                    region: ["City of Sydney"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -211,8 +207,8 @@ try{
                 //go inside the link-click on the tenderID
                     await page1.click(`.table > tbody:nth-child(1) > tr:nth-child(${2+i}) > td:nth-child(1) > a:nth-child(1)`);
                     // await page1.waitForNavigation({waitUntil:'networkidle2'});
-                    await page1.waitForSelector('#backbutton');
-
+                    await page1.waitForSelector('#backbutton')
+                    
                 //extracting descrption
                 let description = "";
 try {
@@ -256,11 +252,10 @@ try {
         //goback to the all tender page
         await page1.goBack();
         }//loop end
-            
+            // reArrangeTheOldAndNewData(scrapedData, "nsw-syd-");
         await browser.close()
         console.log(scrapedData);
     } catch (error) {
-        console.log(scrapedData);
         console.log(error);
         await browser.close();
         
@@ -268,5 +263,5 @@ try {
 
 }
 
-NSW_Warrumbungie(); 
-module.exports = NSW_Warrumbungie;
+NSW_Sydney(); 
+module.exports = NSW_Sydney;
