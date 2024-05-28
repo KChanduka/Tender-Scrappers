@@ -4,7 +4,7 @@ const reArrangeTheOldAndNewData = require("./util_functions");
 
 puppeteer.use(pluginStealth());
 
-async function TAS_Clarence(){
+async function VIC_GreaterDandenong(){
     
     const browser = await puppeteer.launch({
         headless: true,
@@ -14,7 +14,7 @@ async function TAS_Clarence(){
 try{    
     const page1 = await browser.newPage();
 
-    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=5054');
+    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=5569');
 
         //extracting tender links 
         const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
@@ -137,7 +137,7 @@ try{
 
                 //region
 
-                    const region = ["City of Clarence"];
+                    const region = ["City of Greater Dandenong"];
 
 
 
@@ -273,7 +273,7 @@ try{
                     link,
                     updatedDateTime,
                 });
-                // reArrangeTheOldAndNewData(scrapedData, "tas-clc-");
+                // reArrangeTheOldAndNewData(scrapedData, "vic-gdg-");
                 await page2.close();
                 
             }
@@ -287,5 +287,5 @@ try{
 
 }
 
-TAS_Clarence();
-module.exports = TAS_Clarence;
+VIC_GreaterDandenong();
+module.exports = VIC_GreaterDandenong;
