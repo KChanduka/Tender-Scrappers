@@ -3,7 +3,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 const {pwd,email} = require("./login.js");
 const { executablePath } = require('puppeteer'); 
 const Captcha = require("@2captcha/captcha-solver")
-const solver = new Captcha.Solver("af26caa64e6dbe1e678d586fefdc34e8");
+const solver = new Captcha.Solver("api key");
 // const reArrangeTheOldAndNewData = require("./util_functions"); 
 
 const pathToExtension = require('path').join(__dirname, '2captcha-solver');

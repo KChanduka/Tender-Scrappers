@@ -3,13 +3,13 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
 const {pwd,email} = require("./login.js");
 const { executablePath } = require('puppeteer'); 
 const Captcha = require("@2captcha/captcha-solver")
-const solver = new Captcha.Solver("api Key");
+const solver = new Captcha.Solver("api key");
 // const reArrangeTheOldAndNewData = require("./util_functions"); 
 
 const pathToExtension = require('path').join(__dirname, '2captcha-solver');
 puppeteer.use(pluginStealth());
 
-async function VIC_Melbroune(){
+async function VIC_PortPhillip(){
     const browser = await puppeteer.launch({
         headless:false,
         args: ["--no-sandbox",    
@@ -21,7 +21,7 @@ async function VIC_Melbroune(){
     try {
         const page1 = await browser.newPage();
         await page1.setDefaultNavigationTimeout(0); 
-        const url ='https://portal.tenderlink.com/melbourne/login?ReturnUrl=%2Fmelbourne';
+        const url ='https://portal.tenderlink.com/portphillip/login?ReturnUrl=%2Fportphillip%2F';
         //goto the registration page
             await page1.goto(url);
             await page1.waitForSelector('#loginPasswordPane');
@@ -166,7 +166,7 @@ try{
                     atmId: atmIdElement,
                     category: "not specified",
                     location: ["VIC"],
-                    region: ["City of Melbroune"],
+                    region: ["Port Phillip City"],
                     idNumber: idNumberElement,
                     publishedDate: "no date found",
                     closingDate: closingDateElemnt,
@@ -264,5 +264,5 @@ try {
 
 }
 
-VIC_Melbroune(); 
-module.exports = VIC_Melbroune;
+VIC_PortPhillip(); 
+module.exports = VIC_PortPhillip;

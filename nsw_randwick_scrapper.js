@@ -24,8 +24,8 @@ try{
     await page1.click('#current_tenders_27836 > button'); 
         //extracting idNumbers
         let idNUmbers = await page1.evaluate(()=>Array.from(document.querySelectorAll('#current_tenders_27836 > div > p > strong:nth-child(1)'),(e)=>{
-        let contents = e.innerHTML.split('<br>');
-        return contents[0];
+            let contents = e.innerHTML.split('<br>');
+            return contents[0];
         }));
             //remove labels from the idNumbers eg=> RFT Number:
             idNUmbers = idNUmbers.map((elm)=>{
@@ -38,6 +38,12 @@ try{
                 return elements[elements.length -1];
             })
 
+        let tenders = await page1.evaluate(()=>Array.from(document.querySelectorAll('#current_tenders_27836 > div > p '),(e)=>{
+            const idAndTitle = e.querySelector('strong:nth-child(1)').innerHTML.split('<br>');
+            let title = idAndTitle[1].split(':');
+            title = title[1];
+            return ;
+        }))
 
 
         //array for scraped data
@@ -45,9 +51,10 @@ try{
 
 
         //only pushing the current tenders inside the scrped data array from dataItems
-       for(let i =0;i<idNUmbers.length;i++ ){ //last 3 components are not current tenders
+       for(let i =0;i<tenders.length;i++ ){ //last 3 components are not current tenders
                 
-                console.log(idNUmbers[i]);
+                // console.log(idNUmbers[i]);
+                console.log(tenders[i]);
                 // reArrangeTheOldAndNewData(scrapedData, "qld-bbn-");
                 
             }
