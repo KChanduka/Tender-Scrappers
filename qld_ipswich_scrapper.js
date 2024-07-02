@@ -4,7 +4,7 @@ const reArrangeTheOldAndNewData = require("./util_functions");
 
 puppeteer.use(pluginStealth());
 
-async function QLD_Maranoa(){
+async function QLD_Ipswich(){
     
     const browser = await puppeteer.launch({
         headless: true,
@@ -14,7 +14,7 @@ async function QLD_Maranoa(){
 try{    
     const page1 = await browser.newPage();
 
-    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?profileGroupId=3176');
+    await page1.goto('https://www.vendorpanel.com.au/PublicTenders.aspx?mode=all&g=000000000000&profileGroupId=3656');
 
         //extracting tender links 
         const links = await page1.evaluate(()=>Array.from(document.querySelectorAll('#tList > tbody:nth-child(1) > tr > td:nth-child(2) > div:nth-child(2) > a:nth-child(2)'),(e)=>{
@@ -137,7 +137,7 @@ try{
 
                 //region
 
-                    const region = ["Maranoa Regional Council"];
+                    const region = ["City of Ipswich"];
 
 
 
@@ -273,11 +273,11 @@ try{
                     link,
                     updatedDateTime,
                 });
-                // reArrangeTheOldAndNewData(scrapedData, "nsw-bhill-");
+                reArrangeTheOldAndNewData(scrapedData, "qld-ipw-");
                 await page2.close();
                 
             }
-            console.log(scrapedData);
+            //console.log(scrapedData);
             await browser.close();
             
 }catch(error){
@@ -287,4 +287,5 @@ try{
 
 }
 
-QLD_Maranoa();
+QLD_Ipswich();
+module.exports = QLD_Ipswich;
